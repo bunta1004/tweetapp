@@ -12,14 +12,10 @@ local defaultField , inputtext, tweetgroup , str, scrollListener, networkListene
 --テキストフィールド、入力したテキスト、ツイートを入れるグループ、取得したツイート、スクロールの関数、get関数、スクロール画面
 
 local bigbox = display.newGroup()
-
- 
 local scene = composer.newScene()
  
 
-
 function scrollListener( event ) --画面を触っている時の処理
- 
     local phase = event.phase
  
     if ( event.limitReached ) then
@@ -27,16 +23,13 @@ function scrollListener( event ) --画面を触っている時の処理
             print( "Reached top limit" ) --限界まで引っ張った時
             
             network.request( "http://afreep.com/realTime/tweet.php?first=1", "GET", networkListenerget ) --表示の更新
-
         end
     end
- 
     return true
 end
 
 
 local function onTap( event ) --タップイベントの登録と表示
-
     local t = event.target
     local data = t.params
     local options = {
@@ -50,28 +43,22 @@ end
 
 
 local function networkListenerpost( event ) --データを送信する時の処理
-
     if ( event.isError ) then --ネットにエラーが出た時
         print( "Network error: ", event.response )
-
     else --ポストがちゃんと出来た時
         print( "posted", event.response )
-
     end
 end
 
+
 local json_get, _data
 function networkListenerget( event ) --データを表示する時の処理
-
         if ( tweetgroup ~= nil ) then
         display.remove( tweetgroup )
         tweetgroup = nil
         end
 
     tweetgroup = display.newGroup()
-
-
- 
     if ( event.isError ) then
         print( "Network error: ", event.response )
     else
@@ -79,7 +66,6 @@ function networkListenerget( event ) --データを表示する時の処理
         _data = json.decode( json_get ) --jsonを変換
 
         for k,v in pairs( _data ) do --データ全体に対して
-
             str = _data[k].tweet or 'Hello Corona!!!'
 
             print( "display:", str )
@@ -92,27 +78,20 @@ function networkListenerget( event ) --データを表示する時の処理
             back.params = _data[k]            
             back:addEventListener( "tap", onTap )
 
-
             local text = display.newText( group, ": "..str, 0, 0, nil, 20 )
             text.anchorX = 0
             text.x = 25
             text.y = -30
             tweetgroup:insert( group )
             scrollView:insert( tweetgroup )
-
         end
-
     end
-
 end
 
 
 local function textListener( event ) --テキスト入力の時の処理
-
     if ( event.phase == "submitted" ) then
         print( event.target.text )
-
-    
 
         inputtext = event.target.text --入力テキストを代入
 
@@ -129,12 +108,9 @@ local function textListener( event ) --テキスト入力の時の処理
         
         print( "body:", body )
 
-
-
         network.request( "http://afreep.com/realTime/post.php", "POST", networkListenerpost, params ) --post関数の実行
         network.request( "http://afreep.com/realTime/tweet.php?first=1", "GET", networkListenerget ) --表示の更新
     end
-
 end
 
 
@@ -176,7 +152,6 @@ end
  
  
 function scene:hide( event )
- 
     local sceneGroup = self.view
     local phase = event.phase
  
@@ -190,9 +165,7 @@ end
  
  
 function scene:destroy( event )
- 
     local sceneGroup = self.view
- 
 end
 
 
